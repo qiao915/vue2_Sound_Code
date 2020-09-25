@@ -27,7 +27,21 @@ const weexFactoryPlugin = {
 
 const aliases = require('./alias')
 const resolve = p => {
+  /* 斜杠截取 */
   const base = p.split('/')[0]
+
+  /*./alias.js
+  * {
+  *    vue: resolve('src/platforms/web/entry-runtime-with-compiler'),
+  *    compiler: resolve('src/compiler'),
+  *    core: resolve('src/core'),
+  *    shared: resolve('src/shared'),
+  *    web: resolve('src/platforms/web'),
+  *    weex: resolve('src/platforms/weex'),
+  *    server: resolve('src/server'),
+  *    sfc: resolve('src/sfc')
+  *  }
+  * */
   if (aliases[base]) {
     return path.resolve(aliases[base], p.slice(base.length + 1))
   } else {
@@ -35,6 +49,7 @@ const resolve = p => {
   }
 }
 
+/*创建的配置*/
 const builds = {
   // Runtime only (CommonJS). Used by bundlers e.g. Webpack & Browserify
   'web-runtime-cjs-dev': {
@@ -120,8 +135,10 @@ const builds = {
     banner
   },
   // Runtime+compiler development build (Browser)
+  /*指明输出文件配置项*/
   'web-full-dev': {
-    entry: resolve('web/entry-runtime-with-compiler.js'),
+    entry: resolve('web/entry-runtime-with-compiler.js'), // 入口文件
+    /* web/ */
     dest: resolve('dist/vue.js'),
     format: 'umd',
     env: 'development',
@@ -231,6 +248,7 @@ function genConfig (name) {
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {
         warn(msg)
+
       }
     }
   }

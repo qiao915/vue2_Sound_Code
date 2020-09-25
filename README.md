@@ -28,7 +28,7 @@
         ├── directives    // 通用生成Render函数之前需要处理的指令
         └── parser        // 解析模版成AST
     ├── core              // 核心代码 ******
-        ├── components    // 通用组件
+        ├── components    // 通用组件  keep-alive (所有平台通用)
         ├── global-api    // 全局API
         ├── instance      // 构造函数，实例化相关内容，生命周期、事件等
         ├── observer      // 响应式核心目录，双向数据绑定相关文件
@@ -61,31 +61,78 @@
 运行开发命令： npm run dev
 
 
+#### 术语解释（输出包格式 见dist文件夹下）：
+```
+  runtime：仅包含运行时，不包含编译器（不能使用template模板） 
+  common：只能使用require方式导入。cjs规范
+  esm：ES模块，用于webpack2及以上的打包工具
+  umd: （例如vue.js。什么都没有加的）universal module deﬁnition，兼容cjs和amd，用于浏览器
+```
+
 ### 4，入口
+查看 package.json 中的dev
 ```json
 "dev": "rollup -w -c scripts/config.js --sourcemap --environment TARGET:web-full-dev",
 ```
 dev脚本中-c scripts/config.js 指明配置文件所在
 
-参数 TARGET:webfull-dev 指明输出文件配置项，line:123
+参数 TARGET:web-full-dev 指明输出文件配置项
 ```javascript
 // Runtime+compiler development build (Browser) 
 {  
-  'web-full-dev': {    
-    entry: resolve('web/entry-runtime-with-compiler.js'), // 入口    
-    dest: resolve('dist/vue.js'),// 目标文件    
-    format: 'umd', // 输出规范    
-    env: 'development',     
-    alias: {he: './entity-decoder' },    
-    banner 
+   'web-full-dev': {
+      entry: resolve('web/entry-runtime-with-compiler.js'),   //入口文件   web/ 真是路劲见 scripts/slias.js
+      dest: resolve('dist/vue.js'),
+      format: 'umd',
+      env: 'development',
+      alias: { he: './entity-decoder' },
+      banner
+    }
+}
+```
+
+```javascript
+const resolve = p => {
+  /* 斜杠截取 */
+  const base = p.split('/')[0]
+  /*./alias.js
+  * {
+  *    vue: resolve('src/platforms/web/entry-runtime-with-compiler'),
+  *    compiler: resolve('src/compiler'),
+  *    core: resolve('src/core'),
+  *    shared: resolve('src/shared'),
+  *    web: resolve('src/platforms/web'),
+  *    weex: resolve('src/platforms/weex'),
+  *    server: resolve('src/server'),
+  *    sfc: resolve('src/sfc')
+  * }
+  * */
+  if (aliases[base]) {
+    return path.resolve(aliases[base], p.slice(base.length + 1))
+  } else {
+    return path.resolve(__dirname, '../', p)
   }
 }
 ```
+通过resolve()方法得到入口文件路径  为src\platforms\web\entry-runtime-with-compiler.js
+
+
+
 
 ### 5，初始化流程 
 
 #### 入口 platforms/web/entry-runtime-with-compiler.js
 扩展默认$mount方法：处理template或el选项   
+```javascript
+const mount = Vue.prototype.$mount
+
+Vue.prototype.$mount = function (
+  el?: string | Element,
+  hydrating?: boolean
+): Component {
+  //...
+}
+```
 
 #### platforms/web/runtime/index.js
 安装web平台特有指令和组件 定义__patch__：补丁函数，执行patching算法进行更新
