@@ -1,3 +1,4 @@
+/* @flow */
 import Transition from './transition'
 import TransitionGroup from './transition-group'
 

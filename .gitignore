@@ -32,17 +32,6 @@ vue/packages/vue-template-compiler/build.js
 vue/node_modules
 
 
-/vue/dist
-dist/*.gz
-/vue/dist/*.gz
-dist/*.map
-/vue/dist/*.map
-dist/vue.common.min.js
-/vue/dist/vue.common.min.js
-dist/*.js
-/vue/dist/*.js
-
-
 # Log files
 *.log
 npm-debug.log*

@@ -63,6 +63,52 @@
 运行开发命令： npm run dev
 
 
+#### 本地npm run dev 报错处理
+```log
+D:\workspace\html5\everyday2\vue>npm run dev
+ 
+> vue@2.5.0 dev D:\workspace\html5\everyday2\vue
+> rollup -w -c build/config.js --environment TARGET:web-full-dev
+ 
+rollup v0.50.0
+bundles D:\workspace\html5\everyday2\vue\src\platforms\web\entry-runtime-with-compiler.js → dist\vue.js...
+[!] Error: Could not load D:\workspace\html5\everyday2\vue\src\core/config (imported by D:\workspace\html5\everyday2\vue\src\platforms\web\entry-runtime-with-compiler.js): ENOENT: no such file or directory, open 'D:\workspace\html5\everyday2\vue\src\core\config'
+Error: Could not load D:\workspace\html5\everyday2\vue\src\core/config (imported by D:\workspace\html5\everyday2\vue\src\platforms\web\entry-runtime-with-compiler.js): ENOENT: no such file or directory, open 'D:\workspace\html5\everyday2\vue\src\core\config'
+at load.catch.err (D:\workspace\html5\everyday2\vue\node_modules\rollup\dist\rollup.js:9973:11)
+at <anonymous>
+at process._tickCallback (internal/process/next_tick.js:182:7)
+at Function.Module.runMain (internal/modules/cjs/loader.js:697:11)
+at startup (internal/bootstrap/node.js:201:19)
+at bootstrapNodeJSCore (internal/bootstrap/node.js:516:3)
+ 
+npm ERR! code ELIFECYCLE
+npm ERR! errno 1
+npm ERR! vue@2.5.0 dev: `rollup -w -c build/config.js --environment TARGET:web-full-dev`
+npm ERR! Exit status 1
+npm ERR!
+npm ERR! Failed at the vue@2.5.0 dev script.
+npm ERR! This is probably not a problem with npm. There is likely additional logging output above.
+ 
+npm ERR! A complete log of this run can be found in:
+npm ERR! C:\Users\lenovo\AppData\Roaming\npm-cache\_logs\2018-06-05T10_56_08_535Z-debug.log
+```
+其实发生这个错误的原因就是rollup-plugin-alias这个包的问题，windows环境下它将路径的 / 没有换成 \ 的问题
+
+方案:
+下载 此版本的 rollup-plugin-alias 并进行覆盖原文件。
+
+下载地址： https://github.com/ideayuye/rollup-plugin-alias
+
+进入目录rollup-plugin-alias
+```shell
+cd D:\workspace\vue源码\vue\node_modules\rollup-plugin-alias
+```
+执行命令
+```
+npm install
+```
+
+
 #### 术语解释（输出包格式 见dist文件夹下）：
 ```
   runtime：仅包含运行时，不包含编译器（不能使用template模板） 

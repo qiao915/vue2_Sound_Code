@@ -11,36 +11,36 @@ import { LIFECYCLE_HOOKS } from 'shared/constants'
 export type Config = {
   // user
   optionMergeStrategies: { [key: string]: Function };
-  silent: boolean;
-  productionTip: boolean;
-  performance: boolean;
-  devtools: boolean;
-  errorHandler: ?(err: Error, vm: Component, info: string) => void;
-  warnHandler: ?(msg: string, vm: Component, trace: string) => void;
-  ignoredElements: Array<string | RegExp>;
-  keyCodes: { [key: string]: number | Array<number> };
+silent: boolean;
+productionTip: boolean;
+performance: boolean;
+devtools: boolean;
+errorHandler: ?(err: Error, vm: Component, info: string) => void;
+warnHandler: ?(msg: string, vm: Component, trace: string) => void;
+ignoredElements: Array<string | RegExp>;
+keyCodes: { [key: string]: number | Array<number> };
 
-  // platform
-  isReservedTag: (x?: string) => boolean;
-  isReservedAttr: (x?: string) => boolean;
-  parsePlatformTagName: (x: string) => string;
-  isUnknownElement: (x?: string) => boolean;
-  getTagNamespace: (x?: string) => string | void;
-  mustUseProp: (tag: string, type: ?string, name: string) => boolean;
+// platform
+isReservedTag: (x?: string) => boolean;
+isReservedAttr: (x?: string) => boolean;
+parsePlatformTagName: (x: string) => string;
+isUnknownElement: (x?: string) => boolean;
+getTagNamespace: (x?: string) => string | void;
+mustUseProp: (tag: string, type: ?string, name: string) => boolean;
 
-  // private
-  async: boolean;
+// private
+async: boolean;
 
-  // legacy
-  _lifecycleHooks: Array<string>;
+// legacy
+_lifecycleHooks: Array<string>;
 };
 
 export default ({
-  /**
-   * Option merge strategies (used in core/util/options)
-   */
-  // $flow-disable-line
-  optionMergeStrategies: Object.create(null),
+                  /**
+                   * Option merge strategies (used in core/util/options)
+                   */
+                  // $flow-disable-line
+                  optionMergeStrategies: Object.create(null),
 
   /**
    * Whether to suppress warnings.

@@ -1,3 +1,4 @@
+/* @flow */
 import model from './model'
 import show from './show'
 
