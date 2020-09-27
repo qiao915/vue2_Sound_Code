@@ -1,5 +1,8 @@
 /* @flow */
-
+/*
+* todo
+*  执行挂载，获取vdom并转换为dom
+* */
 import config from '../config'
 import Watcher from '../observer/watcher'
 import { mark, measure } from '../util/perf'

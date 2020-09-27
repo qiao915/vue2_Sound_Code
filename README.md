@@ -27,7 +27,7 @@
         ├── codegen       // 把AST转换为Render函数
         ├── directives    // 通用生成Render函数之前需要处理的指令
         └── parser        // 解析模版成AST
-    ├── core              // 核心代码 ******
+    ├── core              // 核心代码 重点
         ├── components    // 通用组件  keep-alive (所有平台通用)
         ├── global-api    // 全局API
         ├── instance      // 构造函数，实例化相关内容，生命周期、事件等
@@ -38,10 +38,12 @@
         └── index.js
     ├── platforms         // 和平台相关的内容
         ├── web           // web端
-           ├── compiler   // web端编译相关代码，用来编译模版成render函数basic.js
-           ├── runtime    // web端运行时相关代码，用于创建Vue实例等
-           ├── server     // 服务端渲染
-           └── util       // 相关工具类
+            ├── compiler   // web端编译相关代码，用来编译模版成render函数basic.js
+            ├── runtime    // web端运行时相关代码，用于创建Vue实例等
+                ├── index.js    // 定义$mount   重点
+            ├── server     // 服务端渲染
+            ├── util       // 相关工具类
+            ├── entry-runtime-with-compiler.js    //入口   重点
       	└── weex          // 基于通用跨平台的 Web 开发语言和开发经验，来构建 Android、iOS 和 Web 应用
     ├── server            // 服务端渲染（ssr）				
     ├── sfc               // 转换单文件组件（*.vue）
@@ -133,6 +135,10 @@ Vue.prototype.$mount = function (
   //...
 }
 ```
+重新$mount
+
+
+
 
 #### platforms/web/runtime/index.js
 安装web平台特有指令和组件 定义__patch__：补丁函数，执行patching算法进行更新

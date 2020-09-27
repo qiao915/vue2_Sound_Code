@@ -1,5 +1,9 @@
 /* @flow */
 
+/*
+* Vue.use() 方法
+* */
+
 import { toArray } from '../util/index'
 
 export function initUse (Vue: GlobalAPI) {
@@ -12,9 +16,9 @@ export function initUse (Vue: GlobalAPI) {
     // additional parameters
     const args = toArray(arguments, 1)
     args.unshift(this)
-    if (typeof plugin.install === 'function') {
+    if (typeof plugin.install === 'function') {    // 有没有install 方法  有则执行install
       plugin.install.apply(plugin, args)
-    } else if (typeof plugin === 'function') {
+    } else if (typeof plugin === 'function') {    //没有 install 方法 则apply
       plugin.apply(null, args)
     }
     installedPlugins.push(plugin)

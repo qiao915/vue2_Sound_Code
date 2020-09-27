@@ -1,5 +1,9 @@
 /* @flow */
-
+/*
+* todo
+*  初始化方法_init()定义
+*  创建组件实例，初始化其数据、属性、事件等
+* */
 import config from '../config'
 import { initProxy } from './proxy'
 import { initState } from './state'
@@ -28,6 +32,7 @@ export function initMixin (Vue: Class<Component>) {
 
     // a flag to avoid this being observed
     vm._isVue = true
+    // 合并选项。将用户传进来的选项和默认选项合并
     // merge options
     if (options && options._isComponent) {
       // optimize internal component instantiation
@@ -48,13 +53,42 @@ export function initMixin (Vue: Class<Component>) {
       vm._renderProxy = vm
     }
     // expose real self
+    /*
+    * todo
+    *  下面为init方法所干的事
+    * */
     vm._self = vm
+
+    /* todo
+        initLifecycle(vm) 进行了以下设置
+        vm.$parent = parent
+        vm.$root = parent ? parent.$root : vm
+        vm.$children = []
+        vm.$refs = {}
+    * */
+    /* 从上面得知  组件的创建顺序 自上而下 */
+    /* 挂在的顺序  自下而上 */
     initLifecycle(vm); // $parent,$root,$children,$refs
-    initEvents(vm); // 处理父组件传递的事件和回调
-    initRender(vm); // $slots,$scopedSlots,_c,$createElement
-    callHook(vm, 'beforeCreate')
-    initInjections(vm) // 获取注入数据
-    initState(vm) // 初始化props，methods，data，computed，watch
+
+
+    initEvents(vm); // 处理（添加监听） 父组件传递的事件和回调
+    initRender(vm); // 跟渲染相关 $slots,$scopedSlots,_c,$createElement
+
+
+    /*todo
+    *  在  beforeCreate 之前   上面的方法都可用
+    *  */
+    callHook(vm, 'beforeCreate') // 调用 beforeCreate 生命周期函数
+
+    /*todo
+       为什么要先注入然后再provide？
+       1，来自祖辈的一些参数 后面要一并代理挂载到当前组件实例上。要和当前组件实例属性做对比判重
+       2，上面注入的某些数据还需要提供给其他
+    * */
+    initInjections(vm) // 获取注入数据   provide  inject
+
+
+    initState(vm) // 数据初始化props，methods，data，computed，watch   数据响应式
     initProvide(vm) // 提供数据注入
     callHook(vm, 'created')
 

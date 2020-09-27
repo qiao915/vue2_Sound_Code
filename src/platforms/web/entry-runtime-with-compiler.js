@@ -56,7 +56,7 @@ Vue.prototype.$mount = function (
     if (template) {   // 优先级 其次为 template
       if (typeof template === 'string') {  // 如果template 为字符串
         if (template.charAt(0) === '#') {  // template 为选择器
-          /* todo ？疑问：class类名也应该是可以的     query(el)获取节点是以document.querySelector(el)方式获取的 */
+          /* todo ？疑问：class类名也应该是可以的     query(el) ->  document.querySelector(el) */
 
           template = idToTemplate(template)
           /* istanbul ignore if */
@@ -76,6 +76,7 @@ Vue.prototype.$mount = function (
         return this
       }
     } else if (el) {     // 优先级 后为 el
+      /*获取 元素 el 中的 html内容和文本*/
       template = getOuterHTML(el)
     }
     if (template) {
@@ -84,6 +85,7 @@ Vue.prototype.$mount = function (
         mark('compile')
       }
 
+      /*编译  得到渲染函数*/
       const { render, staticRenderFns } = compileToFunctions(template, {
         outputSourceRange: process.env.NODE_ENV !== 'production',
         shouldDecodeNewlines,
@@ -91,7 +93,7 @@ Vue.prototype.$mount = function (
         delimiters: options.delimiters,
         comments: options.comments
       }, this)
-      options.render = render
+      options.render = render     //渲染函数
       options.staticRenderFns = staticRenderFns
 
       /* istanbul ignore if */
@@ -101,6 +103,7 @@ Vue.prototype.$mount = function (
       }
     }
   }
+  /* 执行 挂载 */
   return mount.call(this, el, hydrating)
 }
 
@@ -110,8 +113,9 @@ Vue.prototype.$mount = function (
  */
 function getOuterHTML (el: Element): string {
   if (el.outerHTML) {
-    return el.outerHTML
+    return el.outerHTML   //  将el  元素内的html内容和文本 返回
   } else {
+    /*不存在 创建div节点*/
     const container = document.createElement('div')
     container.appendChild(el.cloneNode(true))
     return container.innerHTML
