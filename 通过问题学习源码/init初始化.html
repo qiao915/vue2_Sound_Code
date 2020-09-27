@@ -1,0 +1,25 @@
+<!--
+	Created by qiao.wu@pingcl.com on 2020/9/25.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>init初始化</title>
+    <script src="../vue-study-web16-source/dist/vue.js"></script>
+</head>
+<body>
+<div id="demo">        
+    <h1>{{title}}</h1>            
+</div>
+
+<script>
+    const app = new Vue({
+        el:"#demo",
+        data:{ title:"init初始化"}
+    })
+    console.log(app.$options.render)
+
+</script>
+</body>
+</html>

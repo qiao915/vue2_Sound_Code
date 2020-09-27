@@ -1,0 +1,41 @@
+<!--
+	Created by qiao.wu@pingcl.com on 2020/9/22.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>02-vue组件data要函数形式</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+ 
+<div id="demo">        
+    <h1>vue组件data为什么必须是个函数? </h1>        
+    <comp></comp>
+           
+    <comp></comp>
+       
+</div>
+ 
+   
+<script>
+    /*
+   * todo 源码参考   ：src\core\instance\state.js - initData()
+   * Vue组件可能存在多个实例，如果使用对象形式定义data，则会导致它们共用一个data对象，那么状态变更将会影响所有组件实例，这是不合理的；
+   * 采用函数形式定义，在initData时会将其作为工厂函数返回全新data对象，有效规避多实例之间状态污染问题。
+   * 而在Vue根实例创建过程中则不存在该限制，也是因为根实例只能有一个，不需要担心这种情况。
+   * */
+    Vue.component('comp', {
+        template: '<div @click="counter++">{{counter}}</div>',
+        // data: {counter: 0}
+        data() {
+            return {counter: 0}
+        }
+    })        // 创建实例        
+    const app = new Vue({   //创建根实例   只是单例的
+        el: '#demo',
+    });
+</script>
+</body>
+</html>

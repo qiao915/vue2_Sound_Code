@@ -1,0 +1,63 @@
+<!--
+	Created by qiao.wu@pingcl.com on 2020/9/22.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>03-key的作用和原理</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="demo">
+
+    <h1>key的作用和原理</h1>
+
+<!--    <p v-for="(item,index) in list" :key="index">{{item.title}}</p>-->
+    <p v-for="(item,index) in list" >{{item.title}}</p>
+
+</div>
+
+<script>
+
+    /*
+    *  todo 源码参考   ：src\core\vdom\patch.js - updateChildren()
+    *
+    *   不设置key的话  的key就会为undefined。通过源码的 sameVnode 得知 不设置key，每个节点的key都相同。认为是两个相同的节点
+    *   1. key的作用主要是为了高效的更新虚拟DOM，其原理是vue在patch过程中通过key可以精准判断两 个节点是否是同一个，从而避免频繁更新不同元素，使得整个patch过程更加高效，减少DOM操作量，提高性能。
+    *   2. 另外，若不设置key还可能在列表更新时引发一些隐蔽的bug。 （transition动画不触发、应该更新的demo不更新……）
+    *   3. vue中在使用相同标签名元素的过渡切换时，也会使用到key属性，其目的也是为了让vue可以区分它们，否则vue只会替换其内部属性而不会触发过渡效果
+    *
+    *   Key的主要作用是为了高效的更新虚拟DOM，原理通过源码得知：
+    *       在patch的过程中会执行 patchVnode() ，patchVnode()过程中会执行 updateChildren() 的方法。
+    *       updateChildren() 方法会更新所有的两个相邻的新旧子元素。
+    *       在这个过程中，通过sameVnode()方法判断当前循环的两个节点是否为相同节点；没有加Key的话，就会被判定为两个相同节点，就会频繁的更新元素，额为的做很多demo操作。性能就会收到影响
+    */
+    const app = new Vue({
+        el: "#demo",
+        data() {
+            return {
+                list: [
+                    {title: 1111111},
+                    {title: 2222222},
+                    {title: 3333333},
+                    {title: 4444444},
+                    {title: 5555555},
+                    {title: 6666666},
+                    {title: 7777777},
+                    {title: 8888888},
+                    {title: 9999999}
+                ]
+            }
+        },
+        mounted() {
+            setTimeout(() => {
+                this.list.splice(2, 0, {title: "aaaaaaa"})
+            }, 2000);
+        }
+    })
+
+
+</script>
+</body>
+</html>

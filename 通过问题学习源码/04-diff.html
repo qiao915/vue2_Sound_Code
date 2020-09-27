@@ -1,0 +1,42 @@
+<!--
+	Created by qiao.wu@pingcl.com on 2020/9/23.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>04-diff</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+ 
+<div id="demo">        
+    <h1>如何理解vue中的diff算法</h1>        
+
+       
+</div>
+ 
+   
+<script>
+    /*
+    * 源码分析1：必要性，src/core/instance/lifecycle.js - mountComponent()
+    *   组件中可能存在很多个data中的key使用
+    * 源码分析2：执行方式，/src/core/vdom/patch.js - patchVnode()
+    *   patchVnode是diﬀ发生的地方，整体策略：深度优先，同层比较
+    *   先比较根节点（有没有子节点）
+    * 源码分析3：高效性，/src/core/vdom/patch.js - updateChildren()
+
+    * */
+    const app = new Vue({
+        el:"#demo",
+        data(){
+            return{
+
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

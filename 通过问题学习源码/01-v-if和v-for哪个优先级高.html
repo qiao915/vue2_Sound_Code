@@ -1,0 +1,123 @@
+<!--
+	Created by qiao.wu@pingcl.com on 2020/9/22.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>01-v-if和v-for哪个优先级高</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+ 
+<div id="demo">        
+    <h1>v-for和v-if谁的优先级高？应该如何正确使用避免性能问题？</h1>        
+    <!--  <p v-for="child in children" v-if="isFolder">{{child.title}}</p>     -->  
+    <template v-if="isFolder">            
+        <p v-for="child in children">{{child.title}}</p>        
+    </template>
+       
+</div>
+
+<script>
+    /*
+        * todo 源码参考   /src/compiler/codegen/index.js     L64行
+        * 1. 显然v-for优先于v-if被解析（把你是怎么知道的告诉面试官）
+        * 2. 如果同时出现，每次渲染都会先执行循环再判断条件，无论如何循环都不可避免，浪费了性能
+        * 3. 要避免出现这种情况，则在外层嵌套template，在这一层进行v-if判断，然后在内部进行v-for循环
+        * 4. 如果条件出现在循环内部，可通过计算属性提前过滤掉那些不需要显示的项
+        * */
+
+
+    const app = new Vue({
+        el: "#demo",
+        data() {
+            return {
+                children: [
+                    {title: "11111"},
+                    {title: "22222"},
+                    {title: "33333"},
+                ]
+            }
+        },
+        computed: {
+            isFolder() {
+                return this.children && this.children.length > 0
+            }
+        },
+    })
+    console.log(app.$options.render)
+
+    /*
+    <p v-for="child in children" v-if="isFolder">{{child.title}}</p>
+    */
+    /*
+        (function anonymous() {
+            with(this){
+                return _c(
+                    'div',
+                    {attrs:{"id":"demo"}},
+                    [
+                        _v("        \n    "),
+                        _c(
+                            'h1',[
+                                _v("v-for和v-if谁的优先级高？应该如何正确使用避免性能问题？")
+                            ]
+                        ),
+                        _v("        \n    "),
+                        _l(      //列表渲染函数   将会循环输出列表
+                            (children),
+                            function(child){
+                                return (isFolder)?_c('p',[_v(_s(child.title))]):_e()   // 判断条件   isFolder在内部执行   循环在外部执行
+                            }),
+                        _v("       \n  ")
+                    ],
+                    2
+                )
+            }
+        })*/
+
+    /*(function anonymous() {
+        with (this) {
+            return _c(
+                'div',
+                {attrs: {"id": "demo"}},
+                [
+                    _v("        \n    "),
+                    _c(
+                        'h1',
+                        [
+                            _v("v-for和v-if谁的优先级高？应该如何正确使用避免性能问题？")
+                        ]
+                    ),
+                    _v("        \n  "),
+                    _v("  \n    "),
+                    (isFolder) ?     //先判断条件
+                        [
+                            _v("            \n        "),
+                            _l(  //列表渲染函数
+                                (children),
+                                function (child) {
+                                    return _c(
+                                        'p',
+                                        [_v(_s(child.title))
+                                        ]
+                                    )
+                                }
+                            ),
+                            _v("        \n    ")
+                        ] :
+                        _e(),
+                    _v("    \n")
+                ],
+                2
+            )
+        }
+    })*/
+
+
+
+
+</script>
+</body>
+</html>
