@@ -76,12 +76,20 @@ git commit -m 'feat: 增加 xxx 功能'
 git commit -m 'bug: 修复 xxx 功能'
 
 
+
 ### type可选类型
 "feat", //新特性
+
 "fix", //修复bug
+
 "docs", //文档修改
+
 "perf", // 提升性能的修改
+
 "style", // 代码格式修改, 注意不是 css 修改（不影响代码运行的变动）
+
 "refactor", //代码重构（即不是新增功能，也不是修改bug的代码变动）
+
 "test", // 测试用例修改
+
 "chore", //其他修改, 比如构建流程, 依赖管理,或辅助工具的变动
